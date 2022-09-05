@@ -1,33 +1,43 @@
-import React, { useEffect } from 'react'
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { API_URL, API_KEY, IMAGE_BASE_URL } from '../../Config'
+import MainImage from './Sections/MainImage'
 
 function LandingPage() {
-  useEffect(() => {
-    axios.get('/api/hello')
-    .then(res => {
-      console.log(res.data)
-    })
-  }, [])
-  const navigate = useNavigate();
+  const [Movies, setMovies] = useState([]);
+  const [MainMovieImage, setMainMovieImage] = useState(null);
 
-  const onClickHandler = () => {
-    axios.get('/api/users/logout')
+  useEffect(() => {
+    const endpoint = `${API_URL}movie/popular?api_key=${API_KEY}&language=en-US&page=1`
+
+    fetch(endpoint)
+    .then(response => response.json())
     .then(response => {
-      if(response.data.success) {
-        navigate('/login')
-      }else {
-        alert("로그아웃 실패했습니다.")
-      }
+      setMovies([...response.results])
+      setMainMovieImage(response.results[0])
     })
-  }
+    .catch(err => console.log(err))
+  }, [])
+  
   return (
-    <div style={{
-      display: 'flex', justifyContent: 'center', alignItems: 'center',
-      width: '100%', height: '100vh'
-    }}>
-      <h2>시작 페이지</h2>
-      <button onClick={onClickHandler}>로그아웃</button>
+    <div style={{ width : '100%', margin : '0' }}>
+      {/* Main Image */}
+      {MainMovieImage && // main image 불러 오면 가져와라
+        <MainImage 
+          image={`${IMAGE_BASE_URL}w1280${MainMovieImage.backdrop_path}`}
+          title={MainMovieImage.original_title} 
+          text={MainMovieImage.overview} 
+        />
+      }   
+      <div style={{ width : '85%', margin : '1rem auto'}}>
+        <h2>Movies by latest</h2>
+        <hr />
+
+        {/* Movie Grid Cards */}
+
+      </div>
+      <div style={{ display : 'flex', justifyContent : 'center'}}>
+        <button>Load More</button>
+      </div>
     </div>
   )
 }
