@@ -37,6 +37,8 @@ function LoginPage() {
     dispatch(loginUser(body))
     .then(response => {
       if(response.payload.loginSuccess) {
+        // localStorage 에 저장
+        window.localStorage.setItem('userId', response.payload.userId)
         // root 경로로 이동
         navigate('/')
       } else {

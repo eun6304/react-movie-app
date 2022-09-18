@@ -34,6 +34,9 @@ app.use(bodyParser.json())
 // cookieParser 사용하기
 app.use(cookieParser())
 
+// favorite router
+app.use('/api/favorite',require('./routes/favorite'))
+
 
 const mongoose = require('mongoose')
 mongoose.connect(config.mongoURI, {
@@ -94,7 +97,7 @@ app.post('/api/users/login', (req, res) => {
         // 어디에 저장해야 가장 안전한지는 아직도 논란이 많다.
         res.cookie("x_auth", user.token)
         .status(200)
-        .json({ loginSuccess : true, message : "로그인 되었습니다."})
+        .json({ loginSuccess : true, message : "로그인 되었습니다.", userId : user._id})
 
       })
     })

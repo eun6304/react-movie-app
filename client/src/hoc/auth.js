@@ -16,11 +16,11 @@ export default function(SpecificComponent, option, adminRoute = null) {
         if(!response.payload.isAuth) {
             navigate('/login')
         }else { // 로그인 한 상태
-          if(!response.payload.isAdmin) {
+          /* if(!response.payload.isAdmin) {
             navigate('/')
           }else {
             navigate('/')
-          }
+          } */
         }
       })
     }, [])
